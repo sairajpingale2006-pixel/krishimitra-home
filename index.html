@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>KrishiMitra – FINAL WORKING</title>
+<title>KrishiMitra</title>
 <style>
-  body { margin: 0; overflow: hidden; }
+  body { margin: 0; overflow: hidden; background: #222; }
 </style>
 </head>
 <body>
@@ -14,32 +14,27 @@ import * as THREE from "https://unpkg.com/three@0.164.1/build/three.module.js";
 import { OrbitControls } from "https://unpkg.com/three@0.164.1/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "https://unpkg.com/three@0.164.1/examples/jsm/loaders/GLTFLoader.js";
 
-/* SCENE */
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xcccccc);
+scene.background = new THREE.Color(0x222222);
 
-/* CAMERA */
-const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.01, 1000);
+const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 1000);
+camera.position.set(3, 2, 4);
 
-/* RENDERER */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(innerWidth, innerHeight);
 document.body.appendChild(renderer.domElement);
 
-/* CONTROLS */
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-/* LIGHTS */
-scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2));
+scene.add(new THREE.AmbientLight(0xffffff, 1.5));
 const dir = new THREE.DirectionalLight(0xffffff, 2);
-dir.position.set(5, 10, 7);
+dir.position.set(5, 10, 5);
 scene.add(dir);
 
-/* DEBUG AXES */
+/* AXES — YOU MUST SEE THESE */
 scene.add(new THREE.AxesHelper(2));
 
-/* LOAD MODEL */
 const loader = new GLTFLoader();
 loader.load(
   "./scarecrow.glb",
@@ -62,7 +57,7 @@ loader.load(
     console.log("MODEL LOADED");
   },
   undefined,
-  (err) => console.error(err)
+  (err) => console.error("GLB ERROR", err)
 );
 
 function animate() {
