@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>KrishiMitra – Colored Model</title>
+<title>KrishiMitra – Original Colors</title>
 <style>
   body {
     margin: 0;
     overflow: hidden;
-    background: #111;
+    background: #000;
   }
 </style>
 
-<!-- IMPORT MAP (DO NOT CHANGE) -->
+<!-- IMPORT MAP (CRITICAL – DO NOT CHANGE) -->
 <script type="importmap">
 {
   "imports": {
@@ -19,7 +19,9 @@
     "three/examples/jsm/controls/OrbitControls.js":
       "https://unpkg.com/three@0.164.1/examples/jsm/controls/OrbitControls.js",
     "three/examples/jsm/loaders/GLTFLoader.js":
-      "https://unpkg.com/three@0.164.1/examples/jsm/loaders/GLTFLoader.js"
+      "https://unpkg.com/three@0.164.1/examples/jsm/loaders/GLTFLoader.js",
+    "three/examples/jsm/loaders/RGBELoader.js":
+      "https://unpkg.com/three@0.164.1/examples/jsm/loaders/RGBELoader.js"
   }
 }
 </script>
@@ -31,14 +33,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 /* SCENE */
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x1a1a1a);
 
 /* CAMERA */
 const camera = new THREE.PerspectiveCamera(
-  60,
+  55,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
@@ -49,23 +51,31 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
+renderer.toneMappingExposure = 1.1;
 document.body.appendChild(renderer.domElement);
 
 /* CONTROLS */
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-/* LIGHTING (STRONG & CLEAR) */
-scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+/* LIGHTS (SUPPORT LIGHTS ONLY) */
+scene.add(new THREE.AmbientLight(0xffffff, 0.3));
 
-const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
-keyLight.position.set(5, 10, 5);
-scene.add(keyLight);
+const sun = new THREE.DirectionalLight(0xffffff, 0.6);
+sun.position.set(10, 15, 10);
+scene.add(sun);
 
-const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
-rimLight.position.set(-5, 4, -5);
-scene.add(rimLight);
+/* 🌅 HDRI ENVIRONMENT (THIS FIXES COLORS) */
+new RGBELoader()
+  .setDataType(THREE.FloatType)
+  .load(
+    "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/bambanani_sunset_4k.exr",
+    (hdr) => {
+      hdr.mapping = THREE.EquirectangularReflectionMapping;
+      scene.environment = hdr;
+      scene.background = hdr; // remove this line if you want dark bg
+    }
+  );
 
 /* MODEL */
 let model;
@@ -75,14 +85,10 @@ loader.load(
   (gltf) => {
     model = gltf.scene;
 
-    /* 🔥 FORCE VISIBLE MATERIALS */
+    // 🔑 KEEP ORIGINAL MATERIALS
     model.traverse((child) => {
       if (child.isMesh) {
-        child.material = new THREE.MeshStandardMaterial({
-          color: 0xd2b48c,   // straw / wheat color
-          roughness: 0.85,
-          metalness: 0.0
-        });
+        child.material.needsUpdate = true;
       }
     });
 
@@ -110,7 +116,7 @@ function animate() {
   requestAnimationFrame(animate);
 
   if (model) {
-    model.rotation.y += 0.003; // smooth rotation
+    model.rotation.y += 0.002; // subtle cinematic rotation
   }
 
   controls.update();
