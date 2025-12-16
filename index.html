@@ -58,8 +58,8 @@ document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
-controls.minDistance = 4;   // 🔒 prevent entering model
-controls.maxDistance = 10;  // 🔒 prevent flying away
+controls.minDistance = 4;
+controls.maxDistance = 10;
 
 /* ---------------- LIGHTING ---------------- */
 scene.add(new THREE.AmbientLight(0xffffff, 0.35));
@@ -81,7 +81,7 @@ const ground = new THREE.Mesh(
   })
 );
 ground.rotation.x = -Math.PI / 2;
-ground.position.y = -1;
+ground.position.y = 0;
 scene.add(ground);
 
 /* ---------------- MODEL ---------------- */
@@ -91,17 +91,22 @@ new GLTFLoader().load(
   (gltf) => {
     model = gltf.scene;
 
-    /* 🔥 NORMALIZE MODEL SCALE */
-    model.scale.setScalar(0.4); // SAFE default
+    /* NORMALIZE SCALE */
+    model.scale.setScalar(0.4);
 
     scene.add(model);
 
-    /* CENTER CAMERA ON MODEL */
+    /* 🔥 FIX GROUND INTERSECTION (THE KEY FIX) */
     const box = new THREE.Box3().setFromObject(model);
+    const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
 
-    controls.target.copy(center);
-    camera.lookAt(center);
+    // Move model up so its bottom sits on y = 0
+    model.position.y -= box.min.y;
+
+    /* CAMERA TARGET */
+    controls.target.set(center.x, size.y * 0.5, center.z);
+    camera.lookAt(controls.target);
   },
   undefined,
   (err) => console.error(err)
