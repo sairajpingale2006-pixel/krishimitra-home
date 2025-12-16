@@ -1,112 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>KrishiMitra Web</title>
-<style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background: #000;
-  }
-  canvas {
-    display: block;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>Three Test</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+  </style>
 </head>
-
 <body>
 
 <script type="module">
-/* ===== CDN IMPORTS (VERY IMPORTANT) ===== */
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.164/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.164/examples/jsm/loaders/GLTFLoader.js';
-import { RGBELoader } from 'https://cdn.jsdelivr.net/npm/three@0.164/examples/jsm/loaders/RGBELoader.js';
+import * as THREE from "https://unpkg.com/three@0.164.1/build/three.module.js";
 
-/* ===== SCENE ===== */
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x87ceeb);
 
-/* ===== RENDERER ===== */
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
-document.body.appendChild(renderer.domElement);
-
-/* ===== CAMERA ===== */
 const camera = new THREE.PerspectiveCamera(
-  55,
+  60,
   window.innerWidth / window.innerHeight,
   0.1,
-  500
+  100
 );
-camera.position.set(6, 3, 8);
+camera.position.z = 3;
 
-/* ===== CONTROLS ===== */
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.target.set(0, 1.2, 0);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-/* ===== HDRI SKY (CDN – NO DOWNLOAD) ===== */
-new RGBELoader()
-  .setDataType(THREE.FloatType)
-  .load(
-    'https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/bambanani_sunset_4k.exr',
-    (hdr) => {
-      hdr.mapping = THREE.EquirectangularReflectionMapping;
-      scene.environment = hdr;
-      scene.background = hdr;
-    }
-  );
+/* GREEN CUBE */
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
 
-/* ===== LIGHT ===== */
-const sun = new THREE.DirectionalLight(0xffe0b5, 2);
-sun.position.set(10, 15, 5);
-scene.add(sun);
-
-const ambient = new THREE.AmbientLight(0xffffff, 0.4);
-scene.add(ambient);
-
-/* ===== GROUND ===== */
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(50, 50),
-  new THREE.MeshStandardMaterial({ color: 0x556b2f })
-);
-ground.rotation.x = -Math.PI / 2;
-scene.add(ground);
-
-/* ===== LOAD MODEL (ROOT) ===== */
-const loader = new GLTFLoader();
-loader.load(
-  './scarecrow.glb',
-  (gltf) => {
-    const model = gltf.scene;
-    model.scale.set(1, 1, 1);
-    model.position.set(0, 0, 0);
-    scene.add(model);
-  },
-  undefined,
-  (error) => {
-    console.error('GLB LOAD ERROR:', error);
-  }
-);
-
-/* ===== ANIMATE ===== */
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
   renderer.render(scene, camera);
 }
 animate();
-
-/* ===== RESIZE ===== */
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
 </script>
 
 </body>
