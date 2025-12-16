@@ -8,11 +8,11 @@
   body {
     margin: 0;
     overflow: hidden;
-    background: linear-gradient(#f6b26b, #ffd9a0); /* sunrise fallback */
+    background: linear-gradient(#f6b26b, #ffd9a0);
   }
 </style>
 
-<!-- IMPORT MAP (FIXES "three" ERROR FOREVER) -->
+<!-- IMPORT MAP -->
 <script type="importmap">
 {
   "imports": {
@@ -41,10 +41,10 @@ scene.background = new THREE.Color(0xf6b26b);
 const camera = new THREE.PerspectiveCamera(
   55,
   window.innerWidth / window.innerHeight,
-  0.01,
+  0.1,
   200
 );
-camera.position.set(4, 2.5, 6);
+camera.position.set(6, 4, 6);
 
 /* ---------------- RENDERER ---------------- */
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -58,19 +58,16 @@ document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
-controls.minDistance = 3;
-controls.maxDistance = 9;
+controls.minDistance = 4;   // 🔒 prevent entering model
+controls.maxDistance = 10;  // 🔒 prevent flying away
 
 /* ---------------- LIGHTING ---------------- */
-/* soft ambient */
 scene.add(new THREE.AmbientLight(0xffffff, 0.35));
 
-/* main sunrise sun */
 const sun = new THREE.DirectionalLight(0xffd6a5, 2);
 sun.position.set(8, 10, 6);
 scene.add(sun);
 
-/* rim light (cinematic edge) */
 const rim = new THREE.DirectionalLight(0xffffff, 1.2);
 rim.position.set(-8, 5, -8);
 scene.add(rim);
@@ -79,7 +76,7 @@ scene.add(rim);
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(100, 100),
   new THREE.MeshStandardMaterial({
-    color: 0x6b705c,   // darker = contrast
+    color: 0x6b705c,
     roughness: 1
   })
 );
@@ -93,20 +90,18 @@ new GLTFLoader().load(
   "./scarecrow.glb",
   (gltf) => {
     model = gltf.scene;
+
+    /* 🔥 NORMALIZE MODEL SCALE */
+    model.scale.setScalar(0.4); // SAFE default
+
     scene.add(model);
 
+    /* CENTER CAMERA ON MODEL */
     const box = new THREE.Box3().setFromObject(model);
-    const size = box.getSize(new THREE.Vector3()).length();
     const center = box.getCenter(new THREE.Vector3());
 
-    camera.position.set(
-      center.x + size * 1.2,
-      center.y + size * 0.8,
-      center.z + size * 1.2
-    );
-
-    camera.lookAt(center);
     controls.target.copy(center);
+    camera.lookAt(center);
   },
   undefined,
   (err) => console.error(err)
