@@ -9,8 +9,7 @@
     margin: 0;
     overflow: hidden;
     background: linear-gradient(#f6b26b, #ffe5b4);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    cursor: default;
+    font-family: system-ui, sans-serif;
   }
 
   .hero {
@@ -18,13 +17,12 @@
     top: 40px;
     left: 40px;
     max-width: 460px;
-    color: #1f1f1f;
     z-index: 10;
   }
 
   .hero h1 {
-    font-size: 40px;
     margin: 0;
+    font-size: 40px;
     font-weight: 900;
   }
 
@@ -37,22 +35,58 @@
 
   .label {
     position: absolute;
-    padding: 8px 14px;
     background: rgba(255,255,255,0.95);
+    padding: 8px 14px;
     border-radius: 16px;
     font-size: 13px;
     font-weight: 600;
     pointer-events: none;
     transform: translate(-50%, -50%);
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    transition: opacity 0.2s;
+  }
+
+  /* MINI MAP */
+  .minimap {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 160px;
+    height: 160px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    padding: 10px;
+  }
+
+  .map {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #7a8450;
+    border-radius: 12px;
+  }
+
+  .dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #e63946;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+  }
+
+  .cam {
+    background: #000;
   }
 </style>
 
 <script type="importmap">
 {
   "imports": {
-    "three": "https://unpkg.com/three@0.164.1/build/three.module.js"
+    "three": "https://unpkg.com/three@0.164.1/build/three.module.js",
+    "three/examples/jsm/controls/OrbitControls.js":
+      "https://unpkg.com/three@0.164.1/examples/jsm/controls/OrbitControls.js"
   }
 }
 </script>
@@ -63,9 +97,8 @@
 <div class="hero">
   <h1>KrishiMitra</h1>
   <p>
-    A smart farming platform combining AI crop insights,
-    precision irrigation, weather forecasting, and farmer
-    collaboration — built for the future of agriculture.
+    A smart farming platform combining AI insights, precision irrigation,
+    weather intelligence, and community knowledge.
   </p>
 </div>
 
@@ -74,18 +107,25 @@
 <div class="label" id="l3">Weather Forecasting</div>
 <div class="label" id="l4">Farmer Community</div>
 
+<!-- MINI MAP -->
+<div class="minimap">
+  <div class="map" id="map"></div>
+</div>
+
 <script type="module">
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-/* ───────── SCENE ───────── */
+/* SCENE */
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf6b26b);
 scene.fog = new THREE.Fog(0xf6b26b, 40, 200);
 
-/* ───────── CAMERA ───────── */
+/* CAMERA */
 const camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, 0.1, 500);
+camera.position.set(90, 35, 0);
 
-/* ───────── RENDERER ───────── */
+/* RENDERER */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -93,143 +133,133 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.25;
 document.body.appendChild(renderer.domElement);
 
-/* ───────── LIGHTING ───────── */
-scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+/* CONTROLS */
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.target.set(0, 12, 0);
 
+/* LIGHTS */
+scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 const sun = new THREE.DirectionalLight(0xffd6a5, 3);
 sun.position.set(80, 120, 60);
 scene.add(sun);
 
-/* ───────── GROUND ───────── */
+/* GROUND */
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(600, 600),
-  new THREE.MeshStandardMaterial({ color: 0x7a8450, roughness: 1 })
+  new THREE.MeshStandardMaterial({ color: 0x7a8450 })
 );
 ground.rotation.x = -Math.PI / 2;
 scene.add(ground);
 
-/* ───────── FARM ROWS ───────── */
-const rowMat = new THREE.MeshStandardMaterial({ color: 0x3f6b1b });
-for (let x = -80; x <= 80; x += 6) {
-  const row = new THREE.Mesh(new THREE.BoxGeometry(3.5, 1.2, 120), rowMat);
-  row.position.set(x, 0.6, -40);
-  scene.add(row);
-}
-
-/* ───────── FEATURES ───────── */
-const clickable = [];
-
-/* BARN (AI) */
-const barn = new THREE.Group();
-const barnBase = new THREE.Mesh(
-  new THREE.BoxGeometry(20, 10, 14),
-  new THREE.MeshStandardMaterial({ color: 0xb5523b })
-);
-barnBase.position.y = 5;
-barn.add(barnBase);
-
-const roof = new THREE.Mesh(
-  new THREE.ConeGeometry(16, 6, 4),
-  new THREE.MeshStandardMaterial({ color: 0x7a2e1f })
-);
-roof.rotation.y = Math.PI / 4;
-roof.position.y = 11;
-barn.add(roof);
-scene.add(barn);
-clickable.push({ mesh: barnBase, url: "/ai.html" });
-
-/* IRRIGATION */
-const water = new THREE.Mesh(
-  new THREE.BoxGeometry(100, 0.4, 4),
-  new THREE.MeshStandardMaterial({ color: 0x4da3ff })
-);
-water.position.set(0, 0.2, 40);
-scene.add(water);
-clickable.push({ mesh: water, url: "/irrigation.html" });
-
-/* WEATHER */
-const tower = new THREE.Mesh(
-  new THREE.CylinderGeometry(1.2, 1.5, 20, 12),
-  new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
-);
-tower.position.set(-40, 10, 20);
-scene.add(tower);
-clickable.push({ mesh: tower, url: "/weather.html" });
-
-/* COMMUNITY */
-const farmers = [];
-for (let i = 0; i < 3; i++) {
-  const f = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.8, 2.2, 4, 8),
-    new THREE.MeshStandardMaterial({ color: 0x9b5de5 })
-  );
-  f.position.set(35 + i * 2.2, 1.6, 20);
-  scene.add(f);
-  farmers.push(f);
-}
-clickable.push({ mesh: farmers[1], url: "/community.html" });
-
-/* ───────── LABELS ───────── */
+/* FEATURES */
 const features = [
-  { obj: barn, label: document.getElementById("l1") },
-  { obj: water, label: document.getElementById("l2") },
-  { obj: tower, label: document.getElementById("l3") },
-  { obj: farmers[1], label: document.getElementById("l4") }
+  { name: "AI", pos: new THREE.Vector3(0, 0, 0), label: l1 },
+  { name: "Irrigation", pos: new THREE.Vector3(0, 0, 40), label: l2 },
+  { name: "Weather", pos: new THREE.Vector3(-40, 0, 20), label: l3 },
+  { name: "Community", pos: new THREE.Vector3(40, 0, 20), label: l4 }
 ];
 
-function updateLabels() {
+/* FEATURE MARKERS */
+features.forEach(f => {
+  const m = new THREE.Mesh(
+    new THREE.BoxGeometry(10, 8, 10),
+    new THREE.MeshStandardMaterial({ color: 0xb5523b })
+  );
+  m.position.copy(f.pos);
+  m.position.y = 4;
+  scene.add(m);
+  f.mesh = m;
+});
+
+/* FARMER */
+const farmer = new THREE.Mesh(
+  new THREE.CapsuleGeometry(1, 3, 4, 8),
+  new THREE.MeshStandardMaterial({ color: 0x6d597a })
+);
+farmer.position.set(-60, 1.6, -20);
+scene.add(farmer);
+
+/* FARMER PATH */
+let pathT = 0;
+function moveFarmer() {
+  pathT += 0.002;
+  farmer.position.x = Math.sin(pathT) * 60;
+  farmer.position.z = Math.cos(pathT * 0.5) * 30;
+  farmer.rotation.y = Math.atan2(
+    Math.cos(pathT * 0.5),
+    Math.sin(pathT)
+  );
+}
+
+/* SMOOTH FOCUS */
+let focusTarget = null;
+let focusProgress = 0;
+
+function focusOn(pos) {
+  focusTarget = pos.clone();
+  focusProgress = 0;
+}
+
+features.forEach(f => {
+  f.mesh.userData.focus = () => focusOn(f.pos);
+});
+
+/* MINI MAP */
+const map = document.getElementById("map");
+
+features.forEach(f => {
+  const d = document.createElement("div");
+  d.className = "dot";
+  d.style.left = (f.pos.x + 300) / 600 * 100 + "%";
+  d.style.top  = (f.pos.z + 300) / 600 * 100 + "%";
+  d.onclick = () => focusOn(f.pos);
+  map.appendChild(d);
+});
+
+/* CAMERA DOT */
+const camDot = document.createElement("div");
+camDot.className = "dot cam";
+map.appendChild(camDot);
+
+/* ANIMATE */
+function animate() {
+  requestAnimationFrame(animate);
+
+  moveFarmer();
+
+  if (focusTarget) {
+    focusProgress += 0.02;
+    camera.position.lerp(
+      new THREE.Vector3(
+        focusTarget.x + 30,
+        18,
+        focusTarget.z + 30
+      ),
+      focusProgress
+    );
+    controls.target.lerp(focusTarget.clone().setY(8), focusProgress);
+    if (focusProgress >= 1) focusTarget = null;
+  }
+
   features.forEach(f => {
-    const p = new THREE.Vector3();
-    f.obj.getWorldPosition(p);
+    const p = f.mesh.position.clone();
     p.y += 10;
     p.project(camera);
     f.label.style.left = ((p.x * 0.5 + 0.5) * innerWidth) + "px";
     f.label.style.top  = ((-p.y * 0.5 + 0.5) * innerHeight) + "px";
   });
-}
 
-/* ───────── INTERACTION ───────── */
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-let hovered = null;
+  camDot.style.left = (camera.position.x + 300) / 600 * 100 + "%";
+  camDot.style.top  = (camera.position.z + 300) / 600 * 100 + "%";
 
-addEventListener("mousemove", e => {
-  mouse.x = (e.clientX / innerWidth) * 2 - 1;
-  mouse.y = -(e.clientY / innerHeight) * 2 + 1;
-});
-
-addEventListener("click", () => {
-  if (hovered) window.location.href = hovered.url;
-});
-
-/* ───────── CAMERA MOTION ───────── */
-let t = 0;
-function moveCamera() {
-  t += 0.0008;
-  camera.position.x = Math.cos(t) * 90;
-  camera.position.z = Math.sin(t) * 90;
-  camera.position.y = 35 + Math.sin(t * 2) * 2;
-  camera.lookAt(0, 12, 0);
-}
-
-/* ───────── ANIMATE ───────── */
-function animate() {
-  requestAnimationFrame(animate);
-
-  moveCamera();
-  updateLabels();
-
-  raycaster.setFromCamera(mouse, camera);
-  const hits = raycaster.intersectObjects(clickable.map(c => c.mesh));
-
-  document.body.style.cursor = hits.length ? "pointer" : "default";
-  hovered = hits.length ? clickable.find(c => c.mesh === hits[0].object) : null;
-
+  controls.update();
   renderer.render(scene, camera);
 }
 animate();
 
-/* ───────── RESIZE ───────── */
+/* RESIZE */
 addEventListener("resize", () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
