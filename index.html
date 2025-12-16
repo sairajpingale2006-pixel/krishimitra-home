@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>KrishiMitra – Working Scene</title>
+<title>KrishiMitra – Colored Model</title>
 <style>
-  body { margin: 0; overflow: hidden; background: #111; }
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: #111;
+  }
 </style>
 
-<!-- IMPORT MAP (DO NOT TOUCH) -->
+<!-- IMPORT MAP (DO NOT CHANGE) -->
 <script type="importmap">
 {
   "imports": {
@@ -33,11 +37,16 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1a1a1a);
 
 /* CAMERA */
-const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(
+  60,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 
 /* RENDERER */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(innerWidth, innerHeight);
+renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.2;
@@ -47,16 +56,16 @@ document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-/* LIGHTING (THIS FIXES COLOR) */
-scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+/* LIGHTING (STRONG & CLEAR) */
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
 
-const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
 keyLight.position.set(5, 10, 5);
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
-fillLight.position.set(-5, 3, -5);
-scene.add(fillLight);
+const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+rimLight.position.set(-5, 4, -5);
+scene.add(rimLight);
 
 /* MODEL */
 let model;
@@ -65,9 +74,21 @@ loader.load(
   "./scarecrow.glb",
   (gltf) => {
     model = gltf.scene;
+
+    /* 🔥 FORCE VISIBLE MATERIALS */
+    model.traverse((child) => {
+      if (child.isMesh) {
+        child.material = new THREE.MeshStandardMaterial({
+          color: 0xd2b48c,   // straw / wheat color
+          roughness: 0.85,
+          metalness: 0.0
+        });
+      }
+    });
+
     scene.add(model);
 
-    // Auto frame
+    /* AUTO FRAME CAMERA */
     const box = new THREE.Box3().setFromObject(model);
     const size = box.getSize(new THREE.Vector3()).length();
     const center = box.getCenter(new THREE.Vector3());
@@ -81,7 +102,7 @@ loader.load(
     controls.target.copy(center);
   },
   undefined,
-  (err) => console.error(err)
+  (err) => console.error("GLB ERROR:", err)
 );
 
 /* ANIMATION */
@@ -89,7 +110,7 @@ function animate() {
   requestAnimationFrame(animate);
 
   if (model) {
-    model.rotation.y += 0.003; // smooth rotation ✅
+    model.rotation.y += 0.003; // smooth rotation
   }
 
   controls.update();
@@ -99,9 +120,9 @@ animate();
 
 /* RESIZE */
 window.addEventListener("resize", () => {
-  camera.aspect = innerWidth / innerHeight;
+  camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
+  renderer.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
 
