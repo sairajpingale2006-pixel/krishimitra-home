@@ -2,13 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>KrishiMitra – Sunrise Farm</title>
+<title>KrishiMitra – Smart Farm</title>
 
 <style>
   body {
     margin: 0;
     overflow: hidden;
     background: linear-gradient(#f6b26b, #ffd9a0);
+    font-family: system-ui, sans-serif;
+  }
+
+  /* LABELS */
+  .label {
+    position: absolute;
+    color: #2b2b2b;
+    background: rgba(255,255,255,0.9);
+    padding: 6px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
   }
 </style>
 
@@ -28,104 +43,122 @@
 
 <body>
 
+<!-- LABEL ELEMENTS -->
+<div class="label" id="l1">Crop Health AI</div>
+<div class="label" id="l2">Weather Alerts</div>
+<div class="label" id="l3">Smart Irrigation</div>
+<div class="label" id="l4">Farmer Community</div>
+
 <script type="module">
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-/* ---------------- SCENE ---------------- */
+/* SCENE */
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf6b26b);
 
-/* ---------------- CAMERA ---------------- */
-const camera = new THREE.PerspectiveCamera(
-  55,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  200
-);
-camera.position.set(6, 4, 6);
+/* CAMERA */
+const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.1, 200);
 
-/* ---------------- RENDERER ---------------- */
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+/* RENDERER */
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.25;
+renderer.toneMappingExposure = 1.2;
 document.body.appendChild(renderer.domElement);
 
-/* ---------------- CONTROLS ---------------- */
+/* CONTROLS */
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
-controls.minDistance = 4;
-controls.maxDistance = 10;
+controls.minDistance = 6;
+controls.maxDistance = 12;
 
-/* ---------------- LIGHTING ---------------- */
+/* LIGHTING */
 scene.add(new THREE.AmbientLight(0xffffff, 0.35));
 
 const sun = new THREE.DirectionalLight(0xffd6a5, 2);
 sun.position.set(8, 10, 6);
 scene.add(sun);
 
-const rim = new THREE.DirectionalLight(0xffffff, 1.2);
-rim.position.set(-8, 5, -8);
+const rim = new THREE.DirectionalLight(0xffffff, 1.1);
+rim.position.set(-8, 6, -8);
 scene.add(rim);
 
-/* ---------------- GROUND ---------------- */
+/* GROUND */
 const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(100, 100),
-  new THREE.MeshStandardMaterial({
-    color: 0x6b705c,
-    roughness: 1
-  })
+  new THREE.PlaneGeometry(200, 200),
+  new THREE.MeshStandardMaterial({ color: 0x6b705c, roughness: 1 })
 );
 ground.rotation.x = -Math.PI / 2;
-ground.position.y = 0;
 scene.add(ground);
 
-/* ---------------- MODEL ---------------- */
-let model;
-new GLTFLoader().load(
-  "./scarecrow.glb",
-  (gltf) => {
-    model = gltf.scene;
+/* MODELS */
+const loader = new GLTFLoader();
+const scarecrows = [];
+const positions = [
+  [-4, 0, 0],
+  [ 4, 0, 0],
+  [ 0, 0, -4],
+  [ 0, 0, 4]
+];
 
-    /* NORMALIZE SCALE */
-    model.scale.setScalar(0.4);
+loader.load("./scarecrow.glb", (gltf) => {
+  for (let i = 0; i < 4; i++) {
+    const m = gltf.scene.clone();
+    m.scale.setScalar(0.35);
+    m.position.set(...positions[i]);
+    scene.add(m);
+    scarecrows.push(m);
+  }
 
-    scene.add(model);
+  // FIX GROUND + FRAME CAMERA
+  const box = new THREE.Box3().setFromObject(scarecrows[0]);
+  scarecrows.forEach(m => m.position.y -= box.min.y);
 
-    /* 🔥 FIX GROUND INTERSECTION (THE KEY FIX) */
-    const box = new THREE.Box3().setFromObject(model);
-    const size = box.getSize(new THREE.Vector3());
-    const center = box.getCenter(new THREE.Vector3());
+  const height = box.getSize(new THREE.Vector3()).y;
+  controls.target.set(0, height * 0.55, 0);
 
-    // Move model up so its bottom sits on y = 0
-    model.position.y -= box.min.y;
+  camera.position.set(8, height * 0.9, 8);
+  camera.lookAt(controls.target);
+});
 
-    /* CAMERA TARGET */
-    controls.target.set(center.x, size.y * 0.5, center.z);
-    camera.lookAt(controls.target);
-  },
-  undefined,
-  (err) => console.error(err)
-);
+/* LABEL PROJECTION */
+const labels = [
+  document.getElementById("l1"),
+  document.getElementById("l2"),
+  document.getElementById("l3"),
+  document.getElementById("l4")
+];
 
-/* ---------------- ANIMATION ---------------- */
+function updateLabels() {
+  scarecrows.forEach((m, i) => {
+    const pos = m.position.clone();
+    pos.y += 2.2;
+    pos.project(camera);
+
+    labels[i].style.left = ((pos.x * 0.5 + 0.5) * innerWidth) + "px";
+    labels[i].style.top  = ((-pos.y * 0.5 + 0.5) * innerHeight) + "px";
+  });
+}
+
+/* ANIMATE */
 function animate() {
   requestAnimationFrame(animate);
-  if (model) model.rotation.y += 0.002;
+  scarecrows.forEach(m => m.rotation.y += 0.002);
   controls.update();
+  updateLabels();
   renderer.render(scene, camera);
 }
 animate();
 
-/* ---------------- RESIZE ---------------- */
-window.addEventListener("resize", () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
+/* RESIZE */
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(innerWidth, innerHeight);
 });
 </script>
 
