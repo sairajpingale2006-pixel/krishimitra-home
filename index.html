@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Three Test</title>
-  <style>
-    body { margin: 0; overflow: hidden; }
-  </style>
+<meta charset="UTF-8" />
+<title>Three Controls Test</title>
+<style>
+  body { margin: 0; overflow: hidden; }
+</style>
 </head>
 <body>
 
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.164.1/build/three.module.js";
+import { OrbitControls } from "https://unpkg.com/three@0.164.1/examples/jsm/controls/OrbitControls.js";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x87ceeb);
 
-const camera = new THREE.PerspectiveCamera(
-  60,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  100
-);
-camera.position.z = 3;
+const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 100);
+camera.position.set(2, 2, 3);
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(innerWidth, innerHeight);
 document.body.appendChild(renderer.domElement);
 
-/* GREEN CUBE */
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
+const controls = new OrbitControls(camera, renderer.domElement);
+
+const cube = new THREE.Mesh(
+  new THREE.BoxGeometry(),
+  new THREE.MeshNormalMaterial()
+);
 scene.add(cube);
 
 function animate() {
   requestAnimationFrame(animate);
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
+  controls.update();
   renderer.render(scene, camera);
 }
 animate();
