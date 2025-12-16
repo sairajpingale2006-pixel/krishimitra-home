@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>KrishiMitra – FINAL FIX</title>
+<title>KrishiMitra – Working Scene</title>
 <style>
   body { margin: 0; overflow: hidden; background: #111; }
 </style>
 
-<!-- 🔑 IMPORT MAP (THIS FIXES EVERYTHING) -->
+<!-- IMPORT MAP (DO NOT TOUCH) -->
 <script type="importmap">
 {
   "imports": {
@@ -30,7 +30,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 /* SCENE */
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x222222);
+scene.background = new THREE.Color(0x1a1a1a);
 
 /* CAMERA */
 const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 1000);
@@ -38,55 +38,66 @@ const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 10
 /* RENDERER */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
 document.body.appendChild(renderer.domElement);
 
 /* CONTROLS */
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-/* LIGHTS */
-scene.add(new THREE.AmbientLight(0xffffff, 1.5));
-const dir = new THREE.DirectionalLight(0xffffff, 2);
-dir.position.set(5, 10, 5);
-scene.add(dir);
+/* LIGHTING (THIS FIXES COLOR) */
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
-/* DEBUG AXES */
-scene.add(new THREE.AxesHelper(2));
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+keyLight.position.set(5, 10, 5);
+scene.add(keyLight);
 
-/* LOAD MODEL */
+const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
+fillLight.position.set(-5, 3, -5);
+scene.add(fillLight);
+
+/* MODEL */
+let model;
 const loader = new GLTFLoader();
 loader.load(
   "./scarecrow.glb",
   (gltf) => {
-    const model = gltf.scene;
+    model = gltf.scene;
     scene.add(model);
 
+    // Auto frame
     const box = new THREE.Box3().setFromObject(model);
     const size = box.getSize(new THREE.Vector3()).length();
     const center = box.getCenter(new THREE.Vector3());
 
     camera.position.set(
       center.x + size,
-      center.y + size,
+      center.y + size * 0.6,
       center.z + size
     );
     camera.lookAt(center);
     controls.target.copy(center);
-
-    console.log("MODEL LOADED SUCCESSFULLY");
   },
   undefined,
-  (err) => console.error("GLB ERROR:", err)
+  (err) => console.error(err)
 );
 
-/* LOOP */
+/* ANIMATION */
 function animate() {
   requestAnimationFrame(animate);
+
+  if (model) {
+    model.rotation.y += 0.003; // smooth rotation ✅
+  }
+
   controls.update();
   renderer.render(scene, camera);
 }
 animate();
 
+/* RESIZE */
 window.addEventListener("resize", () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
