@@ -2,133 +2,106 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Cinematic Farm</title>
+<title>KrishiMitra Web</title>
 <style>
-  body { margin: 0; overflow: hidden; background: #000; }
-  canvas { display: block; }
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+  }
+  canvas {
+    display: block;
+  }
 </style>
 </head>
+
 <body>
 
 <script type="module">
+/* ===== CDN IMPORTS (VERY IMPORTANT) ===== */
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164/build/three.module.js';
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.164/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.164/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'https://cdn.jsdelivr.net/npm/three@0.164/examples/jsm/loaders/RGBELoader.js';
 
-/* ---------- SCENE ---------- */
+/* ===== SCENE ===== */
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0xffd8b0, 80, 300);
 
-/* ---------- RENDERER ---------- */
+/* ===== RENDERER ===== */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMappingExposure = 1.2;
 document.body.appendChild(renderer.domElement);
 
-/* ---------- CAMERA ---------- */
+/* ===== CAMERA ===== */
 const camera = new THREE.PerspectiveCamera(
   55,
   window.innerWidth / window.innerHeight,
   0.1,
   500
 );
-camera.position.set(50, 28, 50);
+camera.position.set(6, 3, 8);
 
-/* ---------- CONTROLS ---------- */
+/* ===== CONTROLS ===== */
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.06;
-controls.minDistance = 30;
-controls.maxDistance = 90;
-controls.maxPolarAngle = Math.PI * 0.45;
+controls.target.set(0, 1.2, 0);
 
-/* ---------- HDRI SKY ---------- */
-new RGBELoader().load(
-  'https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/bambanani_sunset_4k.exr',
-  (hdr) => {
-    hdr.mapping = THREE.EquirectangularReflectionMapping;
-    scene.environment = hdr;
-    scene.background = hdr;
-  }
-);
+/* ===== HDRI SKY (CDN – NO DOWNLOAD) ===== */
+new RGBELoader()
+  .setDataType(THREE.FloatType)
+  .load(
+    'https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/bambanani_sunset_4k.exr',
+    (hdr) => {
+      hdr.mapping = THREE.EquirectangularReflectionMapping;
+      scene.environment = hdr;
+      scene.background = hdr;
+    }
+  );
 
-/* ---------- SUN LIGHT ---------- */
-const sun = new THREE.DirectionalLight(0xffe7c2, 1.6);
-sun.position.set(90, 120, 40);
-sun.castShadow = true;
-sun.shadow.mapSize.set(4096, 4096);
-sun.shadow.camera.left = -150;
-sun.shadow.camera.right = 150;
-sun.shadow.camera.top = 150;
-sun.shadow.camera.bottom = -150;
+/* ===== LIGHT ===== */
+const sun = new THREE.DirectionalLight(0xffe0b5, 2);
+sun.position.set(10, 15, 5);
 scene.add(sun);
 
-/* ---------- GROUND ---------- */
+const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(ambient);
+
+/* ===== GROUND ===== */
 const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(400, 400),
-  new THREE.MeshStandardMaterial({
-    color: 0x6b5a3e,
-    roughness: 1,
-    metalness: 0
-  })
+  new THREE.PlaneGeometry(50, 50),
+  new THREE.MeshStandardMaterial({ color: 0x556b2f })
 );
 ground.rotation.x = -Math.PI / 2;
-ground.receiveShadow = true;
 scene.add(ground);
 
-/* ---------- LOAD YOUR MODEL ---------- */
+/* ===== LOAD MODEL (ROOT) ===== */
 const loader = new GLTFLoader();
 loader.load(
   './scarecrow.glb',
   (gltf) => {
     const model = gltf.scene;
-    model.scale.setScalar(3);
+    model.scale.set(1, 1, 1);
     model.position.set(0, 0, 0);
-    model.traverse((o) => {
-      if (o.isMesh) o.castShadow = true;
-    });
     scene.add(model);
+  },
+  undefined,
+  (error) => {
+    console.error('GLB LOAD ERROR:', error);
   }
 );
 
-/* ---------- ATMOSPHERIC DUST ---------- */
-const dustGeo = new THREE.BufferGeometry();
-const dust = [];
-for (let i = 0; i < 300; i++) {
-  dust.push(
-    (Math.random() - 0.5) * 200,
-    Math.random() * 25,
-    (Math.random() - 0.5) * 200
-  );
-}
-dustGeo.setAttribute('position', new THREE.Float32BufferAttribute(dust, 3));
-
-const dustMat = new THREE.PointsMaterial({
-  color: 0xffe6c7,
-  size: 0.6,
-  transparent: true,
-  opacity: 0.55
-});
-
-const dustPts = new THREE.Points(dustGeo, dustMat);
-scene.add(dustPts);
-
-/* ---------- ANIMATE ---------- */
+/* ===== ANIMATE ===== */
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
-  dustPts.rotation.y += 0.0004;
   renderer.render(scene, camera);
 }
 animate();
 
-/* ---------- RESIZE ---------- */
+/* ===== RESIZE ===== */
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
