@@ -2,16 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>KrishiMitra – Original Colors</title>
+<title>KrishiMitra – Proper Lighting</title>
 <style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background: #000;
-  }
+  body { margin: 0; overflow: hidden; background: #111; }
 </style>
 
-<!-- IMPORT MAP (CRITICAL – DO NOT CHANGE) -->
+<!-- IMPORT MAP -->
 <script type="importmap">
 {
   "imports": {
@@ -39,42 +35,43 @@ import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 const scene = new THREE.Scene();
 
 /* CAMERA */
-const camera = new THREE.PerspectiveCamera(
-  55,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
+const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.1, 1000);
 
 /* RENDERER */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 2.2;
+renderer.toneMappingExposure = 2.4; // 🔥 ACTUALLY BRIGHT
 document.body.appendChild(renderer.domElement);
 
 /* CONTROLS */
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-/* LIGHTS (SUPPORT LIGHTS ONLY) */
-scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+/* STUDIO LIGHTS (VISIBLE GUARANTEE) */
+scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.2));
 
-const sun = new THREE.DirectionalLight(0xffffff, 0.6);
-sun.position.set(10, 15, 10);
-scene.add(sun);
+const key = new THREE.DirectionalLight(0xffffff, 2.5);
+key.position.set(5, 10, 5);
+scene.add(key);
 
-/* 🌅 HDRI ENVIRONMENT (THIS FIXES COLORS) */
+const fill = new THREE.DirectionalLight(0xffffff, 1.5);
+fill.position.set(-5, 3, -5);
+scene.add(fill);
+
+/* HDRI (ENV ONLY — NOT BACKGROUND) */
 new RGBELoader()
   .setDataType(THREE.FloatType)
   .load(
     "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/bambanani_sunset_4k.exr",
     (hdr) => {
-      hdr.mapping = THREE.EquirectangularReflectionMapping;
-      scene.environment = hdr;
-      scene.environmentIntensity = 1.8;
-      scene.background = hdr; // remove this line if you want dark bg
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      const envMap = pmrem.fromEquirectangular(hdr).texture;
+
+      scene.environment = envMap;
+      hdr.dispose();
+      pmrem.dispose();
     }
   );
 
@@ -86,16 +83,16 @@ loader.load(
   (gltf) => {
     model = gltf.scene;
 
-    // 🔑 KEEP ORIGINAL MATERIALS
     model.traverse((child) => {
-      if (child.isMesh) {
+      if (child.isMesh && child.material) {
+        child.material.envMapIntensity = 2.5; // 🔑 THIS IS THE FIX
         child.material.needsUpdate = true;
       }
     });
 
     scene.add(model);
 
-    /* AUTO FRAME CAMERA */
+    /* FRAME CAMERA */
     const box = new THREE.Box3().setFromObject(model);
     const size = box.getSize(new THREE.Vector3()).length();
     const center = box.getCenter(new THREE.Vector3());
@@ -109,17 +106,13 @@ loader.load(
     controls.target.copy(center);
   },
   undefined,
-  (err) => console.error("GLB ERROR:", err)
+  (err) => console.error(err)
 );
 
-/* ANIMATION */
+/* ANIMATE */
 function animate() {
   requestAnimationFrame(animate);
-
-  if (model) {
-    model.rotation.y += 0.002; // subtle cinematic rotation
-  }
-
+  if (model) model.rotation.y += 0.002;
   controls.update();
   renderer.render(scene, camera);
 }
@@ -127,9 +120,9 @@ animate();
 
 /* RESIZE */
 window.addEventListener("resize", () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(innerWidth, innerHeight);
 });
 </script>
 
