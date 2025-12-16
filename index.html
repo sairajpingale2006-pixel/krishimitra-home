@@ -50,7 +50,7 @@ controls.maxPolarAngle = Math.PI * 0.45;
 
 /* ---------- HDRI SKY ---------- */
 new RGBELoader().load(
-  './assets/hdri/bambanani_sunset_4k.exr',
+  'https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/bambanani_sunset_4k.exr',
   (hdr) => {
     hdr.mapping = THREE.EquirectangularReflectionMapping;
     scene.environment = hdr;
