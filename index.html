@@ -51,7 +51,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1;
+renderer.toneMappingExposure = 2.2;
 document.body.appendChild(renderer.domElement);
 
 /* CONTROLS */
@@ -73,6 +73,7 @@ new RGBELoader()
     (hdr) => {
       hdr.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = hdr;
+      scene.environmentIntensity = 1.8;
       scene.background = hdr; // remove this line if you want dark bg
     }
   );
