@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>KrishiMitra Model Fix</title>
+<meta charset="UTF-8">
+<title>KrishiMitra – Final</title>
 <style>
   body { margin: 0; overflow: hidden; }
 </style>
@@ -11,19 +11,24 @@
 
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.164.1/build/three.module.js";
-import { OrbitControls } from "https://unpkg.com/three@0.164.1/examples/jsm/controls/OrbitControls.js";
-import { GLTFLoader } from "https://unpkg.com/three@0.164.1/examples/jsm/loaders/GLTFLoader.js";
+import { OrbitControls } from "./js/OrbitControls.js";
+import { GLTFLoader } from "./js/GLTFLoader.js";
 
 /* SCENE */
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xeeeeee);
+scene.background = new THREE.Color(0xcccccc);
 
 /* CAMERA */
-const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.01, 1000);
+const camera = new THREE.PerspectiveCamera(
+  60,
+  window.innerWidth / window.innerHeight,
+  0.01,
+  1000
+);
 
 /* RENDERER */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(innerWidth, innerHeight);
+renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 /* CONTROLS */
@@ -36,7 +41,7 @@ const dir = new THREE.DirectionalLight(0xffffff, 2);
 dir.position.set(5, 10, 7);
 scene.add(dir);
 
-/* DEBUG AXES (VERY IMPORTANT) */
+/* DEBUG AXES (YOU SHOULD SEE THIS) */
 scene.add(new THREE.AxesHelper(2));
 
 /* LOAD MODEL */
@@ -47,29 +52,26 @@ loader.load(
     const model = gltf.scene;
     scene.add(model);
 
-    // AUTO FRAME MODEL 🔥
+    // AUTO FRAME
     const box = new THREE.Box3().setFromObject(model);
     const size = box.getSize(new THREE.Vector3()).length();
     const center = box.getCenter(new THREE.Vector3());
 
-    camera.near = size / 100;
-    camera.far = size * 100;
-    camera.updateProjectionMatrix();
-
-    camera.position.copy(center);
-    camera.position.x += size / 1.5;
-    camera.position.y += size / 1.5;
-    camera.position.z += size / 1.5;
-
+    camera.position.set(
+      center.x + size,
+      center.y + size,
+      center.z + size
+    );
     camera.lookAt(center);
     controls.target.copy(center);
 
-    console.log("MODEL FRAMED", size);
+    console.log("MODEL LOADED AND FRAMED");
   },
   undefined,
-  (err) => console.error("GLB ERROR", err)
+  (err) => console.error("GLB LOAD ERROR", err)
 );
 
+/* LOOP */
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
@@ -77,6 +79,7 @@ function animate() {
 }
 animate();
 
+/* RESIZE */
 window.addEventListener("resize", () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
