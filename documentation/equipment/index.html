@@ -1,1 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Farm Equipment Intelligence • KrishiMitra</title>
+
+<style>
+/* ========== GLOBAL ========== */
+html, body{
+  min-height:100%;
+}
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color:#ecfdf5;
+
+  /* 🌾 FARM BACKGROUND */
+  background-image: url("../bg-farm.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* ========== OVERLAY ========== */
+.bg-overlay{
+  position:fixed;
+  inset:0;
+  background: linear-gradient(
+    rgba(0,0,0,0.55),
+    rgba(0,0,0,0.35),
+    rgba(0,0,0,0.6)
+  );
+  z-index:-1;
+}
+
+/* ========== HEADER ========== */
+header{
+  padding:28px 32px;
+}
+
+header a{
+  text-decoration:none;
+  color:#dcfce7;
+  font-size:14px;
+}
+
+header h1{
+  margin:12px 0 0;
+  font-size:34px;
+  font-weight:900;
+}
+
+/* ========== MAIN ========== */
+main{
+  max-width:1150px;
+  margin:30px auto 90px;
+  padding:0 22px;
+}
+
+/* ========== STORY SECTIONS ========== */
+.section{
+  background: rgba(255,255,255,0.94);
+  border-radius:24px;
+  padding:32px;
+  margin-bottom:44px;
+  color:#1f2933;
+  box-shadow:0 18px 60px rgba(0,0,0,0.35);
+
+  opacity:0;
+  transform: translateY(40px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+
+.section.visible{
+  opacity:1;
+  transform: translateY(0);
+}
+
+.section h2{
+  margin-top:0;
+  font-size:24px;
+}
+
+.section p{
+  line-height:1.7;
+  opacity:0.9;
+}
+
+/* ========== GRID ========== */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+  gap:26px;
+}
+
+.card{
+  background:#f8fafc;
+  border-radius:18px;
+  padding:22px;
+}
+
+.card h3{
+  margin-top:0;
+  font-size:18px;
+}
+
+.card p{
+  font-size:14px;
+  line-height:1.6;
+  opacity:0.85;
+}
+
+/* ========== LIST ---------- */
+ul{
+  padding-left:20px;
+}
+
+li{
+  margin-bottom:10px;
+}
+
+/* ========== FOOTER ========== */
+footer{
+  text-align:center;
+  font-size:13px;
+  opacity:0.7;
+  padding:40px 12px 60px;
+}
+
+/* ========== MOBILE ========== */
+@media(max-width:768px){
+  header h1{ font-size:26px; }
+  .section{ padding:24px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-overlay"></div>
+
+<header>
+  <a href="../">← Back to Knowledge Explorer</a>
+  <h1>🚜 Farm Equipment Intelligence</h1>
+</header>
+
+<main>
+
+  <section class="section">
+    <h2>Why the Right Equipment Matters</h2>
+    <p>
+      Modern farm equipment increases productivity, reduces labor effort,
+      and improves efficiency across every stage of farming.
+      Selecting the right equipment based on land size, crop type,
+      and budget is crucial for sustainable farming.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>What KrishiMitra Helps Farmers Choose</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>🚜 Machinery Selection</h3>
+        <p>
+          Guidance on tractors, tillers, harvesters,
+          and other machinery suited to farm size and crop.
+        </p>
+      </div>
+      <div class="card">
+        <h3>🧰 Implements & Tools</h3>
+        <p>
+          Information on ploughs, seed drills, sprayers,
+          and post-harvest tools.
+        </p>
+      </div>
+      <div class="card">
+        <h3>💸 Cost & ROI Analysis</h3>
+        <p>
+          Compare purchase, rental, and shared usage
+          to maximize return on investment.
+        </p>
+      </div>
+      <div class="card">
+        <h3>🛠️ Maintenance Guidance</h3>
+        <p>
+          Best practices to maintain equipment lifespan
+          and reduce repair costs.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>How Farmers Use Equipment Intelligence</h2>
+    <p>
+      Farmers plan equipment purchases or rentals based on crop cycles,
+      labor availability, and financial capacity.
+      Smart equipment choices reduce workload and improve farm output.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>Key Benefits</h2>
+    <ul>
+      <li>Higher operational efficiency</li>
+      <li>Reduced manual labor dependency</li>
+      <li>Lower long-term operational costs</li>
+      <li>Improved farming precision</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  KrishiMitra • Equipment Intelligence Module
+</footer>
+
+<script>
+/* ========== STORYTELLING REVEAL ========== */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add("visible");
+    }
+  });
+},{ threshold:0.15 });
+
+document.querySelectorAll(".section")
+  .forEach(sec => observer.observe(sec));
+</script>
+
+</body>
+</html>
 
