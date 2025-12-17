@@ -105,6 +105,7 @@ main{
   transition: transform .35s ease, opacity .35s ease;
   opacity:0;
   transform: translateY(40px);
+  cursor:pointer;
 }
 
 .card.visible{
@@ -160,7 +161,8 @@ footer{
 <div class="parallax-overlay"></div>
 
 <header>
-  <a href="/">← Back to Farm</a>
+  <!-- ✅ FIXED BACK LINK -->
+  <a href="../">← Back to Farm</a>
   <h1>Knowledge Explorer</h1>
 </header>
 
@@ -168,30 +170,78 @@ footer{
 
   <div class="section-title">🌦️ Planning & Environment</div>
   <div class="grid">
-    <div class="card"><h3>Weather</h3><p>Real-time and forecast data to plan sowing, irrigation, and harvesting safely.</p><span>Explore →</span></div>
-    <div class="card"><h3>Irrigation</h3><p>Smart water scheduling, drip & sprinkler guidance, and conservation strategies.</p><span>Explore →</span></div>
+    <div class="card" onclick="location.href='./weather/'">
+      <h3>Weather</h3>
+      <p>Real-time and forecast data to plan sowing, irrigation, and harvesting safely.</p>
+      <span>Explore →</span>
+    </div>
+    <div class="card">
+      <h3>Irrigation</h3>
+      <p>Smart water scheduling, drip & sprinkler guidance, and conservation strategies.</p>
+      <span>Explore →</span>
+    </div>
   </div>
 
   <div class="section-title">🌱 Cultivation & Protection</div>
   <div class="grid">
-    <div class="card"><h3>Seeds</h3><p>Region-wise seed selection, yield potential, resistance, and cost insights.</p><span>Explore →</span></div>
-    <div class="card"><h3>Crop Disease</h3><p>Symptom-based disease identification and prevention measures.</p><span>Explore →</span></div>
-    <div class="card"><h3>Fertilizer</h3><p>Balanced nutrition plans based on crop stage and soil health.</p><span>Explore →</span></div>
-    <div class="card"><h3>Pesticides</h3><p>Safe pesticide usage, organic alternatives, and resistance control.</p><span>Explore →</span></div>
+    <div class="card">
+      <h3>Seeds</h3>
+      <p>Region-wise seed selection, yield potential, resistance, and cost insights.</p>
+      <span>Explore →</span>
+    </div>
+    <div class="card">
+      <h3>Crop Disease</h3>
+      <p>Symptom-based disease identification and prevention measures.</p>
+      <span>Explore →</span>
+    </div>
+    <div class="card">
+      <h3>Fertilizer</h3>
+      <p>Balanced nutrition plans based on crop stage and soil health.</p>
+      <span>Explore →</span>
+    </div>
+    <div class="card">
+      <h3>Pesticides</h3>
+      <p>Safe pesticide usage, organic alternatives, and resistance control.</p>
+      <span>Explore →</span>
+    </div>
   </div>
 
   <div class="section-title">💰 Economics & Resources</div>
   <div class="grid">
-    <div class="card"><h3>Market Prices</h3><p>Daily mandi prices, trends, and best-time-to-sell insights.</p><span>Explore →</span></div>
-    <div class="card"><h3>Budget Management</h3><p>Cost planning, profit estimation, and financial discipline tools.</p><span>Explore →</span></div>
-    <div class="card"><h3>Government Schemes</h3><p>Subsidies, insurance schemes, eligibility & application guidance.</p><span>Explore →</span></div>
-    <div class="card"><h3>Equipment</h3><p>Tools, machinery, rental options, and maintenance knowledge.</p><span>Explore →</span></div>
+    <div class="card">
+      <h3>Market Prices</h3>
+      <p>Daily mandi prices, trends, and best-time-to-sell insights.</p>
+      <span>Explore →</span>
+    </div>
+    <div class="card">
+      <h3>Budget Management</h3>
+      <p>Cost planning, profit estimation, and financial discipline tools.</p>
+      <span>Explore →</span>
+    </div>
+    <div class="card">
+      <h3>Government Schemes</h3>
+      <p>Subsidies, insurance schemes, eligibility & application guidance.</p>
+      <span>Explore →</span>
+    </div>
+    <div class="card">
+      <h3>Equipment</h3>
+      <p>Tools, machinery, rental options, and maintenance knowledge.</p>
+      <span>Explore →</span>
+    </div>
   </div>
 
   <div class="section-title">🧠 Intelligence & Guidance</div>
   <div class="grid">
-    <div class="card"><h3>Margin of Area</h3><p>Land allocation, spacing, intercropping, and yield estimation.</p><span>Explore →</span></div>
-    <div class="card"><h3>Expert Advice</h3><p>AI insights, expert consultation, and community knowledge.</p><span>Explore →</span></div>
+    <div class="card">
+      <h3>Margin of Area</h3>
+      <p>Land allocation, spacing, intercropping, and yield estimation.</p>
+      <span>Explore →</span>
+    </div>
+    <div class="card">
+      <h3>Expert Advice</h3>
+      <p>AI insights, expert consultation, and community knowledge.</p>
+      <span>Explore →</span>
+    </div>
   </div>
 
 </main>
