@@ -6,43 +6,63 @@
 <title>Weather Intelligence • KrishiMitra</title>
 
 <style>
+/* ---------- GLOBAL ---------- */
+html, body{
+  height:100%;
+}
+
 body{
   margin:0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(#e0f2fe, #f0fdf4);
-  color:#1f2933;
+  color:#ecfdf5;
+
+  /* 🌾 FARM BACKGROUND */
+  background-image: url("../farm-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
+/* ---------- OVERLAY ---------- */
+.bg-overlay{
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.45);
+  z-index:-1;
+}
+
+/* ---------- HEADER ---------- */
 header{
   padding:24px 28px;
-  background:white;
-  box-shadow:0 6px 20px rgba(0,0,0,0.08);
 }
 
 header a{
   text-decoration:none;
-  color:#2563eb;
+  color:#dcfce7;
   font-size:14px;
 }
 
 header h1{
-  margin:8px 0 0;
-  font-size:30px;
+  margin:10px 0 0;
+  font-size:32px;
   font-weight:900;
 }
 
+/* ---------- MAIN ---------- */
 main{
   max-width:1100px;
-  margin:40px auto;
+  margin:20px auto 80px;
   padding:0 20px;
 }
 
+/* ---------- GLASS SECTION ---------- */
 .section{
-  background:white;
-  border-radius:20px;
+  background: rgba(255,255,255,0.92);
+  border-radius:22px;
   padding:28px;
-  margin-bottom:30px;
-  box-shadow:0 12px 30px rgba(0,0,0,0.07);
+  margin-bottom:32px;
+  color:#1f2933;
+  box-shadow:0 14px 40px rgba(0,0,0,0.3);
 }
 
 .section h2{
@@ -55,10 +75,11 @@ main{
   opacity:0.9;
 }
 
+/* ---------- GRID ---------- */
 .grid{
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
-  gap:20px;
+  gap:22px;
 }
 
 .card{
@@ -72,16 +93,32 @@ main{
   font-size:18px;
 }
 
+.card p{
+  font-size:14px;
+  line-height:1.6;
+  opacity:0.85;
+}
+
+/* ---------- FOOTER ---------- */
 footer{
   text-align:center;
   font-size:13px;
-  opacity:0.6;
-  padding:30px 10px 40px;
+  opacity:0.7;
+  padding:40px 10px 50px;
+}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:768px){
+  header h1{ font-size:26px; }
+  .section{ padding:22px; }
 }
 </style>
 </head>
 
 <body>
+
+<!-- BACKGROUND OVERLAY -->
+<div class="bg-overlay"></div>
 
 <header>
   <a href="../">← Back to Knowledge Explorer</a>
@@ -93,9 +130,9 @@ footer{
   <div class="section">
     <h2>Why Weather Matters in Farming</h2>
     <p>
-      Weather directly impacts every farming decision — from seed selection
-      to irrigation, fertilizer application, and harvesting.
-      Unexpected rain, heatwaves, or frost can lead to severe crop loss.
+      Weather directly influences every farming decision — from selecting seeds
+      and scheduling irrigation to fertilizer application and harvesting.
+      Sudden rain, extreme heat, or frost can result in heavy crop loss if not anticipated.
     </p>
   </div>
 
@@ -104,19 +141,31 @@ footer{
     <div class="grid">
       <div class="card">
         <h3>🌡️ Live Conditions</h3>
-        <p>Current temperature, humidity, wind speed, and rainfall data.</p>
+        <p>
+          Real-time temperature, humidity, rainfall, and wind data
+          specific to the farmer’s location.
+        </p>
       </div>
       <div class="card">
-        <h3>📅 Forecast</h3>
-        <p>7–10 day weather prediction to plan farming activities safely.</p>
+        <h3>📅 Weather Forecast</h3>
+        <p>
+          7–10 day accurate forecasts to plan sowing, irrigation,
+          spraying, and harvesting safely.
+        </p>
       </div>
       <div class="card">
-        <h3>⚠️ Alerts</h3>
-        <p>Early warnings for heavy rain, storms, drought, or extreme heat.</p>
+        <h3>⚠️ Early Warnings</h3>
+        <p>
+          Alerts for storms, heatwaves, heavy rainfall, frost,
+          and drought-like conditions.
+        </p>
       </div>
       <div class="card">
-        <h3>📍 Location-Based</h3>
-        <p>Localized forecasts instead of generic city-level data.</p>
+        <h3>📍 Location-Based Insights</h3>
+        <p>
+          Hyperlocal weather intelligence instead of generic
+          district or city-level data.
+        </p>
       </div>
     </div>
   </div>
@@ -124,19 +173,19 @@ footer{
   <div class="section">
     <h2>How Farmers Use This</h2>
     <p>
-      Farmers can decide the best time for sowing, irrigation scheduling,
-      fertilizer spraying, and harvesting by relying on accurate forecasts.
-      This reduces risk and increases productivity.
+      With reliable weather intelligence, farmers can avoid unnecessary risks,
+      reduce input waste, and protect crops from sudden climate changes.
+      Weather-based planning increases productivity and long-term sustainability.
     </p>
   </div>
 
   <div class="section">
-    <h2>Benefits</h2>
+    <h2>Key Benefits</h2>
     <ul>
-      <li>Reduced crop damage due to unexpected weather</li>
-      <li>Efficient water and fertilizer usage</li>
-      <li>Better yield planning</li>
-      <li>Improved decision-making confidence</li>
+      <li>Reduced crop damage from unexpected weather events</li>
+      <li>Optimized irrigation and fertilizer usage</li>
+      <li>Improved yield prediction and planning</li>
+      <li>Higher confidence in farming decisions</li>
     </ul>
   </div>
 
