@@ -14,31 +14,38 @@
   --accent: #2f855a;
 }
 
-/* ---------- GLOBAL ---------- */
-html, body {
-  height: 100%;
+/* ---------- ROOT BACKGROUND (FULL PAGE) ---------- */
+html{
+  min-height:100%;
+  position:relative;
 }
 
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  color: var(--text);
-
-  /* FORCE BACKGROUND IMAGE */
+html::before{
+  content:"";
+  position:fixed;
+  inset:0;
   background-image: url("./bg-farm.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: #e6f4ea;
+  z-index:-2;
 }
 
-/* DARK OVERLAY (ALWAYS WORKS) */
-body::before{
+/* DARK OVERLAY */
+html::after{
   content:"";
-  position: fixed;
-  inset: 0;
+  position:fixed;
+  inset:0;
   background: rgba(0,0,0,0.25);
-  z-index: -1;
+  z-index:-1;
+}
+
+/* ---------- BODY ---------- */
+body{
+  margin:0;
+  min-height:100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text);
 }
 
 /* ---------- HEADER ---------- */
@@ -62,7 +69,7 @@ header h1{
 /* ---------- MAIN ---------- */
 main{
   max-width:1200px;
-  margin:0 auto 60px;
+  margin:0 auto 80px;
   padding:0 24px;
 }
 
@@ -143,84 +150,32 @@ footer{
 
 <main>
 
-  <!-- PLANNING -->
   <div class="section-title">🌦️ Planning & Environment</div>
   <div class="grid">
-    <div class="card">
-      <h3>Weather</h3>
-      <p>Real-time and forecast data to plan sowing, irrigation, and harvesting safely.</p>
-      <span>Explore →</span>
-    </div>
-    <div class="card">
-      <h3>Irrigation</h3>
-      <p>Smart water scheduling, drip & sprinkler guidance, and conservation strategies.</p>
-      <span>Explore →</span>
-    </div>
+    <div class="card"><h3>Weather</h3><p>Real-time and forecast data to plan sowing, irrigation, and harvesting safely.</p><span>Explore →</span></div>
+    <div class="card"><h3>Irrigation</h3><p>Smart water scheduling, drip & sprinkler guidance, and conservation strategies.</p><span>Explore →</span></div>
   </div>
 
-  <!-- CULTIVATION -->
   <div class="section-title">🌱 Cultivation & Protection</div>
   <div class="grid">
-    <div class="card">
-      <h3>Seeds</h3>
-      <p>Region-wise seed selection, yield potential, resistance, and cost insights.</p>
-      <span>Explore →</span>
-    </div>
-    <div class="card">
-      <h3>Crop Disease</h3>
-      <p>Symptom-based disease identification and prevention measures.</p>
-      <span>Explore →</span>
-    </div>
-    <div class="card">
-      <h3>Fertilizer</h3>
-      <p>Balanced nutrition plans based on crop stage and soil health.</p>
-      <span>Explore →</span>
-    </div>
-    <div class="card">
-      <h3>Pesticides</h3>
-      <p>Safe pesticide usage, organic alternatives, and resistance control.</p>
-      <span>Explore →</span>
-    </div>
+    <div class="card"><h3>Seeds</h3><p>Region-wise seed selection, yield potential, resistance, and cost insights.</p><span>Explore →</span></div>
+    <div class="card"><h3>Crop Disease</h3><p>Symptom-based disease identification and prevention measures.</p><span>Explore →</span></div>
+    <div class="card"><h3>Fertilizer</h3><p>Balanced nutrition plans based on crop stage and soil health.</p><span>Explore →</span></div>
+    <div class="card"><h3>Pesticides</h3><p>Safe pesticide usage, organic alternatives, and resistance control.</p><span>Explore →</span></div>
   </div>
 
-  <!-- ECONOMICS -->
   <div class="section-title">💰 Economics & Resources</div>
   <div class="grid">
-    <div class="card">
-      <h3>Market Prices</h3>
-      <p>Daily mandi prices, trends, and best-time-to-sell insights.</p>
-      <span>Explore →</span>
-    </div>
-    <div class="card">
-      <h3>Budget Management</h3>
-      <p>Cost planning, profit estimation, and financial discipline tools.</p>
-      <span>Explore →</span>
-    </div>
-    <div class="card">
-      <h3>Government Schemes</h3>
-      <p>Subsidies, insurance schemes, eligibility & application guidance.</p>
-      <span>Explore →</span>
-    </div>
-    <div class="card">
-      <h3>Equipment</h3>
-      <p>Tools, machinery, rental options, and maintenance knowledge.</p>
-      <span>Explore →</span>
-    </div>
+    <div class="card"><h3>Market Prices</h3><p>Daily mandi prices, trends, and best-time-to-sell insights.</p><span>Explore →</span></div>
+    <div class="card"><h3>Budget Management</h3><p>Cost planning, profit estimation, and financial discipline tools.</p><span>Explore →</span></div>
+    <div class="card"><h3>Government Schemes</h3><p>Subsidies, insurance schemes, eligibility & application guidance.</p><span>Explore →</span></div>
+    <div class="card"><h3>Equipment</h3><p>Tools, machinery, rental options, and maintenance knowledge.</p><span>Explore →</span></div>
   </div>
 
-  <!-- INTELLIGENCE -->
   <div class="section-title">🧠 Intelligence & Guidance</div>
   <div class="grid">
-    <div class="card">
-      <h3>Margin of Area</h3>
-      <p>Land allocation, spacing, intercropping, and yield estimation.</p>
-      <span>Explore →</span>
-    </div>
-    <div class="card">
-      <h3>Expert Advice</h3>
-      <p>AI insights, expert consultation, and community knowledge.</p>
-      <span>Explore →</span>
-    </div>
+    <div class="card"><h3>Margin of Area</h3><p>Land allocation, spacing, intercropping, and yield estimation.</p><span>Explore →</span></div>
+    <div class="card"><h3>Expert Advice</h3><p>AI insights, expert consultation, and community knowledge.</p><span>Explore →</span></div>
   </div>
 
 </main>
