@@ -6,9 +6,9 @@
 <title>Weather Intelligence • KrishiMitra</title>
 
 <style>
-/* ---------- GLOBAL ---------- */
+/* ========== GLOBAL ========== */
 html, body{
-  height:100%;
+  min-height:100%;
 }
 
 body{
@@ -17,23 +17,27 @@ body{
   color:#ecfdf5;
 
   /* 🌾 FARM BACKGROUND */
-  background-image: url("../farm-bg.jpg");
+  background-image: url("../bg-farm.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
 }
 
-/* ---------- OVERLAY ---------- */
+/* ========== OVERLAY ========== */
 .bg-overlay{
   position:fixed;
   inset:0;
-  background: rgba(0,0,0,0.45);
+  background: linear-gradient(
+    rgba(0,0,0,0.55),
+    rgba(0,0,0,0.35),
+    rgba(0,0,0,0.6)
+  );
   z-index:-1;
 }
 
-/* ---------- HEADER ---------- */
+/* ========== HEADER ========== */
 header{
-  padding:24px 28px;
+  padding:28px 32px;
 }
 
 header a{
@@ -43,49 +47,58 @@ header a{
 }
 
 header h1{
-  margin:10px 0 0;
-  font-size:32px;
+  margin:12px 0 0;
+  font-size:34px;
   font-weight:900;
 }
 
-/* ---------- MAIN ---------- */
+/* ========== MAIN ========== */
 main{
-  max-width:1100px;
-  margin:20px auto 80px;
-  padding:0 20px;
+  max-width:1150px;
+  margin:30px auto 90px;
+  padding:0 22px;
 }
 
-/* ---------- GLASS SECTION ---------- */
+/* ========== STORY SECTIONS ========== */
 .section{
-  background: rgba(255,255,255,0.92);
-  border-radius:22px;
-  padding:28px;
-  margin-bottom:32px;
+  background: rgba(255,255,255,0.94);
+  border-radius:24px;
+  padding:32px;
+  margin-bottom:44px;
   color:#1f2933;
-  box-shadow:0 14px 40px rgba(0,0,0,0.3);
+  box-shadow:0 18px 60px rgba(0,0,0,0.35);
+
+  opacity:0;
+  transform: translateY(40px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+
+.section.visible{
+  opacity:1;
+  transform: translateY(0);
 }
 
 .section h2{
   margin-top:0;
-  font-size:22px;
+  font-size:24px;
 }
 
 .section p{
-  line-height:1.65;
+  line-height:1.7;
   opacity:0.9;
 }
 
-/* ---------- GRID ---------- */
+/* ========== GRID ========== */
 .grid{
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
-  gap:22px;
+  gap:26px;
 }
 
 .card{
   background:#f8fafc;
-  border-radius:16px;
-  padding:20px;
+  border-radius:18px;
+  padding:22px;
 }
 
 .card h3{
@@ -99,25 +112,24 @@ main{
   opacity:0.85;
 }
 
-/* ---------- FOOTER ---------- */
+/* ========== FOOTER ========== */
 footer{
   text-align:center;
   font-size:13px;
   opacity:0.7;
-  padding:40px 10px 50px;
+  padding:40px 12px 60px;
 }
 
-/* ---------- MOBILE ---------- */
+/* ========== MOBILE ========== */
 @media(max-width:768px){
   header h1{ font-size:26px; }
-  .section{ padding:22px; }
+  .section{ padding:24px; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- BACKGROUND OVERLAY -->
 <div class="bg-overlay"></div>
 
 <header>
@@ -127,73 +139,90 @@ footer{
 
 <main>
 
-  <div class="section">
+  <section class="section">
     <h2>Why Weather Matters in Farming</h2>
     <p>
-      Weather directly influences every farming decision — from selecting seeds
-      and scheduling irrigation to fertilizer application and harvesting.
-      Sudden rain, extreme heat, or frost can result in heavy crop loss if not anticipated.
+      Weather is the most unpredictable factor in agriculture.
+      A single unplanned rainfall or heatwave can impact crop health,
+      irrigation cycles, pest spread, and final yield.
+      Smart weather awareness transforms farming from guesswork
+      into informed decision-making.
     </p>
-  </div>
+  </section>
 
-  <div class="section">
+  <section class="section">
     <h2>What KrishiMitra Provides</h2>
     <div class="grid">
       <div class="card">
         <h3>🌡️ Live Conditions</h3>
         <p>
-          Real-time temperature, humidity, rainfall, and wind data
-          specific to the farmer’s location.
+          Real-time temperature, humidity, wind speed,
+          and rainfall based on the farmer’s exact location.
         </p>
       </div>
       <div class="card">
-        <h3>📅 Weather Forecast</h3>
+        <h3>📅 Forecast Intelligence</h3>
         <p>
-          7–10 day accurate forecasts to plan sowing, irrigation,
-          spraying, and harvesting safely.
+          Accurate 7–10 day forecasts to plan sowing,
+          irrigation, spraying, and harvesting confidently.
         </p>
       </div>
       <div class="card">
-        <h3>⚠️ Early Warnings</h3>
+        <h3>⚠️ Early Weather Alerts</h3>
         <p>
-          Alerts for storms, heatwaves, heavy rainfall, frost,
-          and drought-like conditions.
+          Timely warnings for storms, heatwaves, frost,
+          drought, and extreme weather conditions.
         </p>
       </div>
       <div class="card">
-        <h3>📍 Location-Based Insights</h3>
+        <h3>📍 Hyperlocal Insights</h3>
         <p>
-          Hyperlocal weather intelligence instead of generic
-          district or city-level data.
+          Field-level weather insights instead of generic
+          city or district predictions.
         </p>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="section">
-    <h2>How Farmers Use This</h2>
+  <section class="section">
+    <h2>How Farmers Use Weather Intelligence</h2>
     <p>
-      With reliable weather intelligence, farmers can avoid unnecessary risks,
-      reduce input waste, and protect crops from sudden climate changes.
-      Weather-based planning increases productivity and long-term sustainability.
+      By aligning farm operations with reliable weather data,
+      farmers reduce resource wastage, protect crops,
+      and increase productivity. Weather intelligence enables
+      proactive action instead of reactive damage control.
     </p>
-  </div>
+  </section>
 
-  <div class="section">
+  <section class="section">
     <h2>Key Benefits</h2>
     <ul>
-      <li>Reduced crop damage from unexpected weather events</li>
-      <li>Optimized irrigation and fertilizer usage</li>
-      <li>Improved yield prediction and planning</li>
-      <li>Higher confidence in farming decisions</li>
+      <li>Reduced crop losses due to sudden weather changes</li>
+      <li>Optimized irrigation and fertilizer scheduling</li>
+      <li>Improved crop planning and yield stability</li>
+      <li>Higher confidence in daily farming decisions</li>
     </ul>
-  </div>
+  </section>
 
 </main>
 
 <footer>
   KrishiMitra • Weather Intelligence Module
 </footer>
+
+<script>
+/* ========== STORYTELLING REVEAL ========== */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add("visible");
+    }
+  });
+},{ threshold:0.15 });
+
+document.querySelectorAll(".section")
+  .forEach(sec => observer.observe(sec));
+</script>
 
 </body>
 </html>
