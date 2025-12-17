@@ -1,85 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KrishiMitra — Documentation Hub</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KrishiMitra • Knowledge Explorer</title>
 
 <style>
-  body {
-    margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #f4f6f8;
-    color: #1f2937;
-  }
+:root{
+  --glass: rgba(255,255,255,0.75);
+  --border: rgba(255,255,255,0.4);
+  --text: #1f2933;
+  --muted: #4b5563;
+  --accent: #2f855a;
+}
 
-  header {
-    background: #fff;
-    padding: 20px 30px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background:
+    radial-gradient(circle at top, #d9f99d, #a7f3d0 40%, #ecfeff);
+  color: var(--text);
+}
 
-  header h1 {
-    margin: 0;
-    font-size: 28px;
-  }
+/* HEADER */
+header{
+  padding: 28px 32px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
 
-  header a {
-    text-decoration: none;
-    color: #4a5568;
-    font-size: 14px;
-  }
+header a{
+  text-decoration:none;
+  color:#065f46;
+  font-size:14px;
+}
 
-  main {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 0 20px;
-  }
+header h1{
+  margin:0;
+  font-size:34px;
+  font-weight:900;
+}
 
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 22px;
-  }
+/* SECTIONS */
+main{
+  max-width:1200px;
+  margin:0 auto 60px;
+  padding:0 24px;
+}
 
-  .card {
-    background: white;
-    border-radius: 12px;
-    padding: 18px 24px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-    transition: 0.2s;
-  }
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.09);
-  }
+.section-title{
+  margin:40px 0 18px;
+  font-size:22px;
+  font-weight:800;
+  color:#065f46;
+}
 
-  .card h3 {
-    margin-top: 0;
-    font-size: 18px;
-    color: #2d3748;
-  }
+/* CARDS GRID */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+  gap:24px;
+}
 
-  .card p {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #4a5568;
-  }
+/* CARD */
+.card{
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 22px 24px;
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: all 0.25s ease;
+  cursor:pointer;
+}
 
-  footer {
-    text-align: center;
-    padding: 24px;
-    font-size: 13px;
-    color: #718096;
-  }
+.card:hover{
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.15);
+}
 
-  @media (max-width: 768px) {
-    header h1 { font-size: 24px; }
-    .card h3 { font-size: 17px; }
-  }
+.card h3{
+  margin:0 0 8px;
+  font-size:18px;
+}
+
+.card p{
+  margin:0;
+  font-size:14px;
+  line-height:1.6;
+  color:var(--muted);
+}
+
+.card span{
+  display:inline-block;
+  margin-top:14px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--accent);
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  font-size:13px;
+  opacity:0.65;
+  padding:40px 12px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  header h1{ font-size:26px; }
+}
 </style>
 </head>
 
@@ -87,78 +119,47 @@
 
 <header>
   <a href="/">← Back to Farm</a>
-  <h1>Documentation Hub</h1>
+  <h1>Knowledge Explorer</h1>
 </header>
 
 <main>
 
-  <div class="cards">
-
-    <div class="card">
-      <h3>🌦️ Weather</h3>
-      <p>Real-time and forecast weather data (temperature, humidity, rainfall, seasonal planning) to schedule sowing, irrigation, and harvesting with confidence.</p>
-    </div>
-
-    <div class="card">
-      <h3>🌱 Seeds</h3>
-      <p>Guidance on seed varieties, climate-fit recommendations, yield expectations, and cost estimates, tailored to crops and regions.</p>
-    </div>
-
-    <div class="card">
-      <h3>📜 Government Schemes & Subsidy</h3>
-      <p>Central and state agricultural schemes, eligibility criteria, subsidy details, documentation, and step-by-step application guidance.</p>
-    </div>
-
-    <div class="card">
-      <h3>💧 Irrigation</h3>
-      <p>Water management insights including drip/sprinkler system guidance, irrigation schedules, conservation techniques and water-use optimization.</p>
-    </div>
-
-    <div class="card">
-      <h3>📊 Current Market Price</h3>
-      <p>Daily mandi and market price feeds, trend charts, and comparisons across regions to help decide best selling times.</p>
-    </div>
-
-    <div class="card">
-      <h3>🦠 Crop Disease</h3>
-      <p>Symptom-based disease identification with treatment steps and preventive measures to protect crop health and reduce losses.</p>
-    </div>
-
-    <div class="card">
-      <h3>🧪 Fertilizer</h3>
-      <p>Fertilization guidance based on crop type and soil health, helping balance nutrition with cost-effective application schedules.</p>
-    </div>
-
-    <div class="card">
-      <h3>🐞 Pesticides</h3>
-      <p>Safe pesticide usage instructions, recommended products, organic alternatives, and environmental safety tips.</p>
-    </div>
-
-    <div class="card">
-      <h3>🚜 Equipment</h3>
-      <p>Information on tools and machinery, maintenance tips, cost comparisons, rentals, and government support for equipment acquisition.</p>
-    </div>
-
-    <div class="card">
-      <h3>💰 Budget Management</h3>
-      <p>Cost planning guides, expense trackers, profit calculators and tips for financial planning across the crop cycle.</p>
-    </div>
-
-    <div class="card">
-      <h3>📐 Margin of Area</h3>
-      <p>Land allocation strategies, space optimization, recommended spacing, and area-wise yield estimation guidance.</p>
-    </div>
-
-    <div class="card">
-      <h3>👩‍🏫 Expert Advice</h3>
-      <p>Connect to agriculture experts for personalized recommendations, community Q&A solutions, and mentor-style guidance.</p>
-    </div>
-
+  <!-- PLANNING -->
+  <div class="section-title">🌦️ Planning & Environment</div>
+  <div class="grid">
+    <div class="card"><h3>Weather</h3><p>Real-time and forecast data to plan sowing, irrigation, and harvesting safely.</p><span>Explore →</span></div>
+    <div class="card"><h3>Irrigation</h3><p>Smart water scheduling, drip & sprinkler guidance, and conservation strategies.</p><span>Explore →</span></div>
   </div>
+
+  <!-- CULTIVATION -->
+  <div class="section-title">🌱 Cultivation & Protection</div>
+  <div class="grid">
+    <div class="card"><h3>Seeds</h3><p>Region-wise seed selection, yield potential, resistance, and cost insights.</p><span>Explore →</span></div>
+    <div class="card"><h3>Crop Disease</h3><p>Symptom-based disease identification and prevention measures.</p><span>Explore →</span></div>
+    <div class="card"><h3>Fertilizer</h3><p>Balanced nutrition plans based on crop stage and soil health.</p><span>Explore →</span></div>
+    <div class="card"><h3>Pesticides</h3><p>Safe pesticide usage, organic alternatives, and resistance control.</p><span>Explore →</span></div>
+  </div>
+
+  <!-- ECONOMICS -->
+  <div class="section-title">💰 Economics & Resources</div>
+  <div class="grid">
+    <div class="card"><h3>Market Prices</h3><p>Daily mandi prices, trends, and best-time-to-sell insights.</p><span>Explore →</span></div>
+    <div class="card"><h3>Budget Management</h3><p>Cost planning, profit estimation, and financial discipline tools.</p><span>Explore →</span></div>
+    <div class="card"><h3>Government Schemes</h3><p>Subsidies, insurance schemes, eligibility & application guidance.</p><span>Explore →</span></div>
+    <div class="card"><h3>Equipment</h3><p>Tools, machinery, rental options, and maintenance knowledge.</p><span>Explore →</span></div>
+  </div>
+
+  <!-- INTELLIGENCE -->
+  <div class="section-title">🧠 Intelligence & Guidance</div>
+  <div class="grid">
+    <div class="card"><h3>Margin of Area</h3><p>Land allocation, spacing, intercropping, and yield estimation.</p><span>Explore →</span></div>
+    <div class="card"><h3>Expert Advice</h3><p>AI insights, expert consultation, and community knowledge.</p><span>Explore →</span></div>
+  </div>
+
 </main>
 
 <footer>
-  KrishiMitra • Knowledge Hub • All farming essentials in one place
+  KrishiMitra • Knowledge Explorer • Designed for real farmers
 </footer>
 
 </body>
