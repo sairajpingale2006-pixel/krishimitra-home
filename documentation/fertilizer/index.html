@@ -1,1 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fertilizer Intelligence • KrishiMitra</title>
+
+<style>
+/* ========== GLOBAL ========== */
+html, body{
+  min-height:100%;
+}
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color:#ecfdf5;
+
+  /* 🌾 FARM BACKGROUND */
+  background-image: url("../bg-farm.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* ========== OVERLAY ========== */
+.bg-overlay{
+  position:fixed;
+  inset:0;
+  background: linear-gradient(
+    rgba(0,0,0,0.55),
+    rgba(0,0,0,0.35),
+    rgba(0,0,0,0.6)
+  );
+  z-index:-1;
+}
+
+/* ========== HEADER ========== */
+header{
+  padding:28px 32px;
+}
+
+header a{
+  text-decoration:none;
+  color:#dcfce7;
+  font-size:14px;
+}
+
+header h1{
+  margin:12px 0 0;
+  font-size:34px;
+  font-weight:900;
+}
+
+/* ========== MAIN ========== */
+main{
+  max-width:1150px;
+  margin:30px auto 90px;
+  padding:0 22px;
+}
+
+/* ========== STORY SECTIONS ========== */
+.section{
+  background: rgba(255,255,255,0.94);
+  border-radius:24px;
+  padding:32px;
+  margin-bottom:44px;
+  color:#1f2933;
+  box-shadow:0 18px 60px rgba(0,0,0,0.35);
+
+  opacity:0;
+  transform: translateY(40px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+
+.section.visible{
+  opacity:1;
+  transform: translateY(0);
+}
+
+.section h2{
+  margin-top:0;
+  font-size:24px;
+}
+
+.section p{
+  line-height:1.7;
+  opacity:0.9;
+}
+
+/* ========== GRID ========== */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+  gap:26px;
+}
+
+.card{
+  background:#f8fafc;
+  border-radius:18px;
+  padding:22px;
+}
+
+.card h3{
+  margin-top:0;
+  font-size:18px;
+}
+
+.card p{
+  font-size:14px;
+  line-height:1.6;
+  opacity:0.85;
+}
+
+/* ========== LIST ---------- */
+ul{
+  padding-left:20px;
+}
+
+li{
+  margin-bottom:10px;
+}
+
+/* ========== FOOTER ========== */
+footer{
+  text-align:center;
+  font-size:13px;
+  opacity:0.7;
+  padding:40px 12px 60px;
+}
+
+/* ========== MOBILE ========== */
+@media(max-width:768px){
+  header h1{ font-size:26px; }
+  .section{ padding:24px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-overlay"></div>
+
+<header>
+  <a href="../">← Back to Knowledge Explorer</a>
+  <h1>🌿 Fertilizer Intelligence</h1>
+</header>
+
+<main>
+
+  <section class="section">
+    <h2>Why Fertilizer Management Matters</h2>
+    <p>
+      Fertilizers supply essential nutrients required for healthy plant growth.
+      Incorrect fertilizer usage can lead to nutrient imbalance, soil degradation,
+      reduced yield, and increased production costs.
+      Smart fertilizer management ensures optimal crop nutrition and soil health.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>What KrishiMitra Helps Optimize</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>🧪 Nutrient Requirements</h3>
+        <p>
+          Identify crop-specific nutrient needs including nitrogen,
+          phosphorus, potassium, and micronutrients.
+        </p>
+      </div>
+      <div class="card">
+        <h3>📊 Fertilizer Dosage</h3>
+        <p>
+          Guidance on correct fertilizer quantity to avoid overuse
+          or under-application.
+        </p>
+      </div>
+      <div class="card">
+        <h3>🌱 Growth Stage Timing</h3>
+        <p>
+          Apply fertilizers at the right crop growth stage
+          for maximum nutrient absorption.
+        </p>
+      </div>
+      <div class="card">
+        <h3>🌿 Organic vs Chemical</h3>
+        <p>
+          Compare organic, bio, and chemical fertilizers
+          to choose sustainable options.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>How Farmers Use Fertilizer Intelligence</h2>
+    <p>
+      Farmers make informed decisions on fertilizer selection,
+      timing, and quantity based on soil condition, crop stage,
+      and expected yield. This improves productivity while
+      preserving long-term soil fertility.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>Key Benefits</h2>
+    <ul>
+      <li>Improved nutrient efficiency and crop growth</li>
+      <li>Reduced fertilizer wastage and cost</li>
+      <li>Healthier soil structure and fertility</li>
+      <li>Higher and sustainable crop yield</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  KrishiMitra • Fertilizer Intelligence Module
+</footer>
+
+<script>
+/* ========== STORYTELLING REVEAL ========== */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add("visible");
+    }
+  });
+},{ threshold:0.15 });
+
+document.querySelectorAll(".section")
+  .forEach(sec => observer.observe(sec));
+</script>
+
+</body>
+</html>
 
