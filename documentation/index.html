@@ -15,9 +15,7 @@
 }
 
 /* ---------- PARALLAX BACKGROUND ---------- */
-html{
-  min-height:100%;
-}
+html{ min-height:100%; }
 
 .parallax-bg{
   position: fixed;
@@ -26,7 +24,6 @@ html{
   background-size: cover;
   background-position: center;
   z-index:-3;
-  transform: translateY(0);
   will-change: transform;
 }
 
@@ -70,7 +67,7 @@ main{
   padding:0 24px;
 }
 
-/* ---------- STORY SECTIONS ---------- */
+/* ---------- SECTION TITLE ---------- */
 .section-title{
   margin:60px 0 22px;
   font-size:24px;
@@ -81,7 +78,6 @@ main{
   transform: translateY(30px);
   transition: 0.6s ease;
 }
-
 .section-title.visible{
   opacity:1;
   transform: translateY(0);
@@ -107,12 +103,10 @@ main{
   transform: translateY(40px);
   cursor:pointer;
 }
-
 .card.visible{
   opacity:1;
   transform: translateY(0);
 }
-
 .card:hover{
   transform: translateY(-8px) scale(1.02);
 }
@@ -121,14 +115,12 @@ main{
   margin:0 0 8px;
   font-size:18px;
 }
-
 .card p{
   margin:0;
   font-size:14px;
   line-height:1.6;
   color:var(--muted);
 }
-
 .card span{
   display:inline-block;
   margin-top:14px;
@@ -156,12 +148,11 @@ footer{
 
 <body>
 
-<!-- PARALLAX LAYERS -->
+<!-- PARALLAX -->
 <div class="parallax-bg"></div>
 <div class="parallax-overlay"></div>
 
 <header>
-  <!-- ✅ FIXED BACK LINK -->
   <a href="../">← Back to Farm</a>
   <h1>Knowledge Explorer</h1>
 </header>
@@ -172,74 +163,74 @@ footer{
   <div class="grid">
     <div class="card" onclick="location.href='./weather/'">
       <h3>Weather</h3>
-      <p>Real-time and forecast data to plan sowing, irrigation, and harvesting safely.</p>
+      <p>Real-time and forecast data to plan farming safely.</p>
       <span>Explore →</span>
     </div>
-    <div class="card">
+    <div class="card" onclick="location.href='./irrigation/'">
       <h3>Irrigation</h3>
-      <p>Smart water scheduling, drip & sprinkler guidance, and conservation strategies.</p>
+      <p>Smart water scheduling and irrigation methods.</p>
       <span>Explore →</span>
     </div>
   </div>
 
   <div class="section-title">🌱 Cultivation & Protection</div>
   <div class="grid">
-    <div class="card">
+    <div class="card" onclick="location.href='./seeds/'">
       <h3>Seeds</h3>
-      <p>Region-wise seed selection, yield potential, resistance, and cost insights.</p>
+      <p>Seed selection based on region and yield.</p>
       <span>Explore →</span>
     </div>
-    <div class="card">
+    <div class="card" onclick="location.href='./crop-disease/'">
       <h3>Crop Disease</h3>
-      <p>Symptom-based disease identification and prevention measures.</p>
+      <p>Disease identification and prevention.</p>
       <span>Explore →</span>
     </div>
-    <div class="card">
+    <div class="card" onclick="location.href='./fertilizer/'">
       <h3>Fertilizer</h3>
-      <p>Balanced nutrition plans based on crop stage and soil health.</p>
+      <p>Balanced crop nutrition strategies.</p>
       <span>Explore →</span>
     </div>
-    <div class="card">
+    <div class="card" onclick="location.href='./pesticides/'">
       <h3>Pesticides</h3>
-      <p>Safe pesticide usage, organic alternatives, and resistance control.</p>
+      <p>Safe pesticide usage and alternatives.</p>
       <span>Explore →</span>
     </div>
   </div>
 
   <div class="section-title">💰 Economics & Resources</div>
   <div class="grid">
-    <div class="card">
+    <div class="card" onclick="location.href='./market-price/'">
       <h3>Market Prices</h3>
-      <p>Daily mandi prices, trends, and best-time-to-sell insights.</p>
+      <p>Mandi prices and selling insights.</p>
       <span>Explore →</span>
     </div>
-    <div class="card">
+    <div class="card" onclick="location.href='./budget-management/'">
       <h3>Budget Management</h3>
-      <p>Cost planning, profit estimation, and financial discipline tools.</p>
+      <p>Expense and profit planning.</p>
       <span>Explore →</span>
     </div>
-    <div class="card">
+    <div class="card" onclick="location.href='./government-schemes/'">
       <h3>Government Schemes</h3>
-      <p>Subsidies, insurance schemes, eligibility & application guidance.</p>
+      <p>Subsidies and farmer welfare schemes.</p>
       <span>Explore →</span>
     </div>
-    <div class="card">
+    <div class="card" onclick="location.href='./equipment/'">
       <h3>Equipment</h3>
-      <p>Tools, machinery, rental options, and maintenance knowledge.</p>
+      <p>Tools, machinery and maintenance.</p>
       <span>Explore →</span>
     </div>
   </div>
 
   <div class="section-title">🧠 Intelligence & Guidance</div>
   <div class="grid">
-    <div class="card">
-      <h3>Margin of Area</h3>
-      <p>Land allocation, spacing, intercropping, and yield estimation.</p>
+    <div class="card" onclick="location.href='./area-margin/'">
+      <h3>Area & Margin</h3>
+      <p>Land allocation and profit estimation.</p>
       <span>Explore →</span>
     </div>
-    <div class="card">
+    <div class="card" onclick="location.href='./expert-advice/'">
       <h3>Expert Advice</h3>
-      <p>AI insights, expert consultation, and community knowledge.</p>
+      <p>AI + expert-backed farming guidance.</p>
       <span>Explore →</span>
     </div>
   </div>
@@ -247,24 +238,20 @@ footer{
 </main>
 
 <footer>
-  KrishiMitra • Knowledge Explorer • Designed for real farmers
+  KrishiMitra • Knowledge Explorer • Built for real farmers
 </footer>
 
 <script>
-/* ---------- PARALLAX SCROLL ---------- */
+/* PARALLAX */
 const bg = document.querySelector('.parallax-bg');
-
 window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  bg.style.transform = `translateY(${y * 0.15}px)`;
+  bg.style.transform = `translateY(${window.scrollY * 0.15}px)`;
 });
 
-/* ---------- STORY REVEAL ---------- */
+/* REVEAL */
 const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      entry.target.classList.add('visible');
-    }
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.classList.add('visible');
   });
 },{ threshold:0.15 });
 
