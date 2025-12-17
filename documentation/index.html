@@ -14,30 +14,27 @@
   --accent: #2f855a;
 }
 
-/* ---------- ROOT BACKGROUND (FULL PAGE) ---------- */
+/* ---------- PARALLAX BACKGROUND ---------- */
 html{
   min-height:100%;
-  position:relative;
 }
 
-html::before{
-  content:"";
-  position:fixed;
-  inset:0;
+.parallax-bg{
+  position: fixed;
+  inset: -10%;
   background-image: url("./bg-farm.jpg");
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  z-index:-2;
+  z-index:-3;
+  transform: translateY(0);
+  will-change: transform;
 }
 
-/* DARK OVERLAY */
-html::after{
-  content:"";
-  position:fixed;
+.parallax-overlay{
+  position: fixed;
   inset:0;
-  background: rgba(0,0,0,0.25);
-  z-index:-1;
+  background: rgba(0,0,0,0.28);
+  z-index:-2;
 }
 
 /* ---------- BODY ---------- */
@@ -69,40 +66,54 @@ header h1{
 /* ---------- MAIN ---------- */
 main{
   max-width:1200px;
-  margin:0 auto 80px;
+  margin:0 auto 100px;
   padding:0 24px;
 }
 
+/* ---------- STORY SECTIONS ---------- */
 .section-title{
-  margin:42px 0 18px;
-  font-size:22px;
-  font-weight:800;
+  margin:60px 0 22px;
+  font-size:24px;
+  font-weight:900;
   color:#ecfdf5;
-  text-shadow:0 4px 14px rgba(0,0,0,0.6);
+  text-shadow:0 4px 18px rgba(0,0,0,0.65);
+  opacity:0;
+  transform: translateY(30px);
+  transition: 0.6s ease;
+}
+
+.section-title.visible{
+  opacity:1;
+  transform: translateY(0);
 }
 
 /* ---------- GRID ---------- */
 .grid{
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
-  gap:26px;
+  gap:28px;
 }
 
 /* ---------- CARD ---------- */
 .card{
   background: var(--glass);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
   border-radius: 22px;
-  padding: 22px 24px;
+  padding: 24px;
   border: 1px solid var(--border);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-  transition: all 0.25s ease;
-  cursor:pointer;
+  box-shadow: 0 14px 45px rgba(0,0,0,0.3);
+  transition: transform .35s ease, opacity .35s ease;
+  opacity:0;
+  transform: translateY(40px);
+}
+
+.card.visible{
+  opacity:1;
+  transform: translateY(0);
 }
 
 .card:hover{
-  transform: translateY(-8px) scale(1.015);
-  box-shadow: 0 22px 60px rgba(0,0,0,0.35);
+  transform: translateY(-8px) scale(1.02);
 }
 
 .card h3{
@@ -130,18 +141,23 @@ footer{
   text-align:center;
   font-size:13px;
   color:#dcfce7;
-  padding:50px 12px 40px;
+  padding:60px 12px 40px;
   text-shadow:0 2px 10px rgba(0,0,0,0.6);
 }
 
 /* ---------- MOBILE ---------- */
 @media(max-width:768px){
   header h1{ font-size:26px; }
+  .section-title{ font-size:20px; }
 }
 </style>
 </head>
 
 <body>
+
+<!-- PARALLAX LAYERS -->
+<div class="parallax-bg"></div>
+<div class="parallax-overlay"></div>
 
 <header>
   <a href="/">← Back to Farm</a>
@@ -183,6 +199,28 @@ footer{
 <footer>
   KrishiMitra • Knowledge Explorer • Designed for real farmers
 </footer>
+
+<script>
+/* ---------- PARALLAX SCROLL ---------- */
+const bg = document.querySelector('.parallax-bg');
+
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  bg.style.transform = `translateY(${y * 0.15}px)`;
+});
+
+/* ---------- STORY REVEAL ---------- */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+},{ threshold:0.15 });
+
+document.querySelectorAll('.card, .section-title')
+  .forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>
