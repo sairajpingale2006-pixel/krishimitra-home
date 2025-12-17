@@ -186,7 +186,7 @@ const barn = new THREE.Mesh(
 );
 barn.position.set(0, 5, 0);
 scene.add(barn);
-makeClickable(barn, "/ai");
+makeClickable(barn, "./ai/");
 
 /* 2️⃣ Documentation */
 const docs = new THREE.Mesh(
@@ -195,7 +195,7 @@ const docs = new THREE.Mesh(
 );
 docs.position.set(0, 0.2, 40);
 scene.add(docs);
-makeClickable(docs, "/documentation");
+makeClickable(docs, "./documentation/");
 
 /* 3️⃣ Crop Recognition */
 const cropRec = new THREE.Mesh(
@@ -204,7 +204,7 @@ const cropRec = new THREE.Mesh(
 );
 cropRec.position.set(-40, 10, 20);
 scene.add(cropRec);
-makeClickable(cropRec, "/crop-recognition");
+makeClickable(cropRec, "./crop-recognition/");
 
 /* 4️⃣ Community */
 const community = new THREE.Mesh(
@@ -213,7 +213,7 @@ const community = new THREE.Mesh(
 );
 community.position.set(35, 2.5, 20);
 scene.add(community);
-makeClickable(community, "/community");
+makeClickable(community, "./community/");
 
 /* LABELS */
 const labelMap = [
